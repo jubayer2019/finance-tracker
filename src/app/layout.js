@@ -1,4 +1,5 @@
 import './globals.css';
+import Script from 'next/script'; // <-- Fixed the import path here
 
 export const metadata = {
   title: 'FintechEngine - Modern Ledger Ecosystem',
@@ -8,7 +9,10 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en" className="h-full bg-slate-900 selection:bg-emerald-500 selection:text-slate-900">
-      <body className="h-full font-sans antialiased text-slate-100">{children}</body>
+      <body className="h-full font-sans antialiased text-slate-100">
+        {children}
+        <Script src="https://accounts.google.com/gsi/client" strategy="lazyOnload" />
+      </body>
     </html>
   );
 }

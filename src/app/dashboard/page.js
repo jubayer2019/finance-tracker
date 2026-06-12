@@ -4,7 +4,7 @@ import TransactionForm from '../components/TransactionForm';
 import TransactionTable from '../components/TransactionTable';
 import AnalyticsChart from '../components/AnalyticsChart';
 import BudgetWidget from '../components/BudgetWidget';
-import { Wallet, ArrowDownRight, ArrowUpRight, Shield } from 'lucide-react';
+import { Wallet, ArrowDownRight, ArrowUpRight } from 'lucide-react';
 
 export default function DashboardPage() {
   const [transactions, setTransactions] = useState([]);
@@ -21,7 +21,7 @@ export default function DashboardPage() {
       ]);
 
       if (transRes.ok && sumRes.ok) {
-        const transData = await transRes.getReader ? [] : await transRes.json();
+        const transData = await transRes.json();
         const sumData = await sumRes.json();
         setTransactions(transData);
         setSummary(sumData);
@@ -65,14 +65,14 @@ export default function DashboardPage() {
           </div>
           <div className="p-3 bg-emerald-500/10 text-emerald-400 rounded-xl border border-emerald-500/20"><Wallet className="h-6 w-6" /></div>
         </div>
-        <div className="rounded-2xl border border-slate-800 bg-slate-900/20 p-6 flex items-center justify-between">
+        <div className="grid rounded-2xl border border-slate-800 bg-slate-900/20 p-6 flex items-center justify-between">
           <div>
             <p className="text-xs font-bold uppercase tracking-wider text-slate-400">Total Income</p>
             <h4 className="mt-2 text-3xl font-mono font-black text-emerald-400">${summary.totalIncome.toLocaleString()}</h4>
           </div>
           <div className="p-3 bg-emerald-500/10 text-emerald-400 rounded-xl border border-emerald-500/20"><ArrowUpRight className="h-6 w-6" /></div>
         </div>
-        <div className="rounded-2xl border border-slate-800 bg-slate-900/20 p-6 flex items-center justify-between">
+        <div className="grid rounded-2xl border border-slate-800 bg-slate-900/20 p-6 flex items-center justify-between">
           <div>
             <p className="text-xs font-bold uppercase tracking-wider text-slate-400">Expense Attrition</p>
             <h4 className="mt-2 text-3xl font-mono font-black text-rose-400">${summary.totalExpenses.toLocaleString()}</h4>
