@@ -1,3 +1,8 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Any custom baseline additions below */
 @keyframes pulse {
   0% { opacity: 1; }
   50% { opacity: 0.5; }
