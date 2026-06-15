@@ -6,6 +6,12 @@ import AnalyticsChart from '../components/AnalyticsChart';
 import BudgetWidget from '../components/BudgetWidget';
 import { Wallet, ArrowDownRight, ArrowUpRight } from 'lucide-react';
 
+// ⚠️ Forces Next.js to render this page dynamically, bypassing static build-time auth checks
+export const dynamic = 'force-dynamic';
+
+import { authClient } from "@/lib/auth-client";
+// ... the rest of your dashboard code ...
+
 export default function DashboardPage() {
   const [transactions, setTransactions] = useState([]);
   const [summary, setSummary] = useState({ totalBalance: 0, totalIncome: 0, totalExpenses: 0 });
