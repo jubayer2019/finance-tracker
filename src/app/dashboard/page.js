@@ -18,12 +18,14 @@ export default function DashboardPage() {
   const [budget, setBudget] = useState(0);
   const [loading, setLoading] = useState(true);
 
+  const API = process.env.NEXT_PUBLIC_API_URL;
+
   const fetchDashboardTelemetry = useCallback(async () => {
     try {
-      const token = localStorage.getItem('token');
-      const [transRes, sumRes] = await Promise.all([
-        fetch(`${process.env.NEXT_PUBLIC_API_URL}/transactions`, { headers: { 'Authorization': `Bearer ${token}` } }),
-        fetch(`${process.env.NEXT_PUBLIC_API_URL}/transactions/summary/analytics`, { headers: { 'Authorization': `Bearer ${token}` } })
+      const [transRes, sumRes, budgetRes] = await Promise.all([
+        fetch(`${API}/api/transactions`, { credentials: 'include' }),
+        fetch(`${API}/api/transactions/summary/analytics`, { credentials: 'include' }),
+        fetch(`${API}/api/budget`, { credentials: 'include' })
       ]);
 
       if (transRes.ok && sumRes.ok) {
@@ -32,23 +34,19 @@ export default function DashboardPage() {
         setTransactions(transData);
         setSummary(sumData);
       }
+
+      if (budgetRes.ok) {
+        const budgetData = await budgetRes.json();
+        setBudget(budgetData.monthlyBudget || 0);
+      }
     } catch (err) {
       console.error('Error fetching dashboard telemetry:', err);
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [API]);
 
   useEffect(() => {
-    const activeUser = localStorage.getItem('user');
-    if (activeUser) {
-      try {
-        const parsed = JSON.parse(activeUser);
-        if (parsed.monthlyBudget) setBudget(parsed.monthlyBudget);
-      } catch (e) {
-        console.error('Error parsing active user layout:', e);
-      }
-    }
     fetchDashboardTelemetry();
   }, [fetchDashboardTelemetry]);
 

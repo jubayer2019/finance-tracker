@@ -1,9 +1,11 @@
 'use client';
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { authClient } from "@/lib/auth-client";
 import { Cpu, Lock, Mail, User, ShieldAlert, ArrowRight, Loader2 } from 'lucide-react';
 
 export default function AuthPage() {
+  const router = useRouter();
   const [activeTab, setActiveTab] = useState('login');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -37,13 +39,15 @@ export default function AuthPage() {
       const { error: authError } = await authClient.signIn.email({
         email,
         password,
-        callbackURL: "/dashboard"
       });
       if (authError) throw new Error(authError.message || 'Invalid credentials.');
+      // Email/password sign-in does not auto-redirect, so navigate manually
+      // and refresh so the new session cookie is picked up server-side.
+      router.push('/dashboard');
+      router.refresh();
     } catch (err) {
       setError(err.message);
     } finally {
-      // ⚠️ CRITICAL REPAIR: This block ALWAYS fires, killing the infinite spinning loop
       setLoading(false);
     }
   };
@@ -58,9 +62,11 @@ export default function AuthPage() {
         email,
         password,
         name,
-        callbackURL: "/dashboard"
       });
       if (authError) throw new Error(authError.message || 'Registration failed.');
+      // Better Auth signs the user in on successful sign-up; go to the dashboard.
+      router.push('/dashboard');
+      router.refresh();
     } catch (err) {
       setError(err.message);
     } finally {

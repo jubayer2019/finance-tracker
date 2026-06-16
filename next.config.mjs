@@ -1,15 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  async rewrites() {
-    return [
-      {
-        // Whenever the frontend pings its own /api path...
-        source: '/api/:path*',
-        // ...silently forward it to your external backend URL
-        destination: 'https://finance-tracker-server-eta.vercel.app/api/:path*',
-      },
-    ];
-  },
+  // The frontend talks to the API server directly via NEXT_PUBLIC_API_URL with
+  // credentialed (cookie) requests, so no rewrite proxy is needed.
 };
 
 export default nextConfig;

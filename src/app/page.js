@@ -1,18 +1,20 @@
 'use client';
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { authClient } from "@/lib/auth-client";
 
 export default function RootPage() {
   const router = useRouter();
+  const { data: session, isPending } = authClient.useSession();
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (token) {
+    if (isPending) return;
+    if (session) {
       router.replace('/dashboard');
     } else {
       router.replace('/login');
     }
-  }, [router]);
+  }, [session, isPending, router]);
 
   return (
     <div className="flex h-screen w-full items-center justify-center bg-slate-950">

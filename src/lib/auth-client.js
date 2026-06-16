@@ -1,6 +1,8 @@
 import { createAuthClient } from "better-auth/react";
 
+// Points at the API server root. Better Auth automatically appends "/api/auth"
+// to this base URL. Set NEXT_PUBLIC_API_URL to your deployed server origin,
+// e.g. https://finance-tracker-server-eta.vercel.app
 export const authClient = createAuthClient({
-  // Ensure this points directly to your API root, Better Auth appends /auth internally
-  baseURL: process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000" || "https://finance-tracker-by-jubayer.vercel.app",
+  baseURL: process.env.NEXT_PUBLIC_API_URL,
 });

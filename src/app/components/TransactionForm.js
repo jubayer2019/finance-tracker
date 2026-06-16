@@ -15,11 +15,11 @@ export default function TransactionForm({ onTransactionAdded }) {
     setLoading(true);
 
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/transactions`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/transactions`, {
         method: 'POST',
+        credentials: 'include',
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify({ title, amount: Number(amount), type, category })
       });

@@ -8,11 +8,11 @@ export default function BudgetWidget({ currentExpenses, initialBudget, onBudgetU
 
   const saveBudget = async () => {
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/budget`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/budget`, {
         method: 'PUT',
+        credentials: 'include',
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify({ monthlyBudget: Number(budget) })
       });

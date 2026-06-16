@@ -1,13 +1,19 @@
 'use client';
 import { useRouter } from 'next/navigation';
+import { authClient } from "@/lib/auth-client";
 import { LogOut, ShieldCheck, Cpu } from 'lucide-react';
 
 export default function Navbar() {
   const router = useRouter();
 
-  const handleLogout = () => {
-    localStorage.clear();
+  const handleLogout = async () => {
+    try {
+      await authClient.signOut();
+    } catch (err) {
+      console.error('Sign out failed:', err);
+    }
     router.push('/login');
+    router.refresh();
   };
 
   return (

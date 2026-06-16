@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { authClient } from "@/lib/auth-client";
 
 export default function RegisterPage() {
   const [name, setName] = useState('');
@@ -17,17 +18,16 @@ export default function RegisterPage() {
     setError('');
 
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/register`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, email, password }),
+      const { error: authError } = await authClient.signUp.email({
+        email,
+        password,
+        name,
       });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.message || 'Account registration validation failed');
-      
-      localStorage.setItem('token', data.token);
-      localStorage.setItem('user', JSON.stringify({ name: data.name, email: data.email }));
+      if (authError) throw new Error(authError.message || 'Account registration failed');
+
+      // Better Auth establishes the session cookie on sign-up.
       router.push('/dashboard');
+      router.refresh();
     } catch (err) {
       setError(err.message);
     } finally {

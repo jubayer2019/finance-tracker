@@ -5,9 +5,9 @@ export default function TransactionTable({ transactions, onDeleteSuccess }) {
   const handleDelete = async (id) => {
     if (!confirm('Purge structural ledger entry permanently?')) return;
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/transactions/${id}`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/transactions/${id}`, {
         method: 'DELETE',
-        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+        credentials: 'include'
       });
       if (res.ok) onDeleteSuccess();
     } catch (err) {
